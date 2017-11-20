@@ -27,7 +27,7 @@ app.get('/', function (req, res) {
 });
 
 app.get("/scrape", function(req, res) {
-  axios.get("http://time.com/").then(function(response) {
+  axios.get("http://www.foxnews.com/us.html").then(function(response) {
     let $ = cheerio.load(response.data);
     $("article div").each(function(i, element) {
       let result = {};
@@ -38,9 +38,8 @@ app.get("/scrape", function(req, res) {
         .find("h2").children("a")
         .attr("href");
       result.blurb = $(this)
-        .find("p")
+        .find("p").children("a")
         .text();
-
       db.Article
         .create(result)
         .then(function(dbArticle) {
